@@ -35,13 +35,15 @@ class Comment
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=picture::class, mappedBy="comment")
+     * @ORM\ManyToOne(targetEntity=picture::class, inversedBy="comments")
      */
     private $picture_id_picture;
 
+
+
     public function __construct()
     {
-        $this->picture_id_picture = new ArrayCollection();
+
     }
 
 
@@ -87,35 +89,19 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Collection|picture[]
-     */
-    public function getPictureIdPicture(): Collection
+    public function getPictureIdPicture(): ?picture
     {
         return $this->picture_id_picture;
     }
 
-    public function addPictureIdPicture(picture $pictureIdPicture): self
+    public function setPictureIdPicture(?picture $picture_id_picture): self
     {
-        if (!$this->picture_id_picture->contains($pictureIdPicture)) {
-            $this->picture_id_picture[] = $pictureIdPicture;
-            $pictureIdPicture->setComment($this);
-        }
+        $this->picture_id_picture = $picture_id_picture;
 
         return $this;
     }
 
-    public function removePictureIdPicture(picture $pictureIdPicture): self
-    {
-        if ($this->picture_id_picture->removeElement($pictureIdPicture)) {
-            // set the owning side to null (unless already changed)
-            if ($pictureIdPicture->getComment() === $this) {
-                $pictureIdPicture->setComment(null);
-            }
-        }
 
-        return $this;
-    }
 
 
 }

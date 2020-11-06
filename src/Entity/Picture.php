@@ -49,19 +49,22 @@ class Picture
      */
     private $gallery;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="picture_id_picture")
-     */
-    private $comment;
+
 
     /**
      * @ORM\ManyToMany(targetEntity=keywords::class, inversedBy="pictures")
      */
     private $picture_has_keywords;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="picture_id_picture")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->picture_has_keywords = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,18 +144,6 @@ class Picture
         return $this;
     }
 
-    public function getComment(): ?Comment
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?Comment $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
     /**
      * @return Collection|keywords[]
      */
@@ -173,6 +164,36 @@ class Picture
     public function removePictureHasKeyword(keywords $pictureHasKeyword): self
     {
         $this->picture_has_keywords->removeElement($pictureHasKeyword);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setPictureIdPicture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getPictureIdPicture() === $this) {
+                $comment->setPictureIdPicture(null);
+            }
+        }
 
         return $this;
     }
