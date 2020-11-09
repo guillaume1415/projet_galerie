@@ -35,7 +35,7 @@ class Gallery
     private $status_gallery;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="gallery_has_user")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="gallery_has_user")
      */
     private $user;
 
@@ -55,6 +55,7 @@ class Gallery
     {
         $this->gallery_id_gallery = new ArrayCollection();
         $this->keywords_has_gallery = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +161,22 @@ class Gallery
     public function removeKeywordsHasGallery(keywords $keywordsHasGallery): self
     {
         $this->keywords_has_gallery->removeElement($keywordsHasGallery);
+
+        return $this;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->user->contains($user)) {
+            $this->user[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->user->removeElement($user);
 
         return $this;
     }

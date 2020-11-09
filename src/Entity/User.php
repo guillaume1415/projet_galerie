@@ -35,19 +35,15 @@ class User
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=gallery::class, mappedBy="user")
+     * @ORM\ManyToMany(targetEntity=gallery::class, mappedBy="user")
      */
     private $gallery_has_user;
 
-    /**
-     * @ORM\OneToMany(targetEntity=comment::class, mappedBy="user")
-     */
-    private $User_id_User;
+
 
     public function __construct()
     {
         $this->gallery_has_user = new ArrayCollection();
-        $this->User_id_User = new ArrayCollection();
     }
 
 
