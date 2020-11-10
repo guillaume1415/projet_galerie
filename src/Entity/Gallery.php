@@ -40,22 +40,23 @@ class Gallery
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=picture::class, mappedBy="gallery")
-     */
-    private $gallery_id_gallery;
-
-    /**
      * @ORM\ManyToMany(targetEntity=keywords::class, inversedBy="galleries")
      */
     private $keywords_has_gallery;
 
+    /**
+     * @ORM\OneToMany(targetEntity=galleryHasUser::class, mappedBy="gallery")
+     */
+    private $gallery_id_gallery;
 
 
     public function __construct()
     {
-        $this->gallery_id_gallery = new ArrayCollection();
+
         $this->keywords_has_gallery = new ArrayCollection();
         $this->user = new ArrayCollection();
+        $this->gallery_id_gallery = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -99,7 +100,7 @@ class Gallery
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ArrayCollection
     {
         return $this->user;
     }
@@ -111,35 +112,7 @@ class Gallery
         return $this;
     }
 
-    /**
-     * @return Collection|picture[]
-     */
-    public function getGalleryIdGallery(): Collection
-    {
-        return $this->gallery_id_gallery;
-    }
 
-    public function addGalleryIdGallery(picture $galleryIdGallery): self
-    {
-        if (!$this->gallery_id_gallery->contains($galleryIdGallery)) {
-            $this->gallery_id_gallery[] = $galleryIdGallery;
-            $galleryIdGallery->setGallery($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGalleryIdGallery(picture $galleryIdGallery): self
-    {
-        if ($this->gallery_id_gallery->removeElement($galleryIdGallery)) {
-            // set the owning side to null (unless already changed)
-            if ($galleryIdGallery->getGallery() === $this) {
-                $galleryIdGallery->setGallery(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|keywords[]
@@ -180,4 +153,36 @@ class Gallery
 
         return $this;
     }
+
+    /**
+     * @return Collection|galleryHasUser[]
+     */
+    public function getGalleryIdGallery(): Collection
+    {
+        return $this->gallery_id_gallery;
+    }
+
+    public function addGalleryIdGallery(galleryHasUser $galleryIdGallery): self
+    {
+        if (!$this->gallery_id_gallery->contains($galleryIdGallery)) {
+            $this->gallery_id_gallery[] = $galleryIdGallery;
+            $galleryIdGallery->setGallery($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGalleryIdGallery(galleryHasUser $galleryIdGallery): self
+    {
+        if ($this->gallery_id_gallery->removeElement($galleryIdGallery)) {
+            // set the owning side to null (unless already changed)
+            if ($galleryIdGallery->getGallery() === $this) {
+                $galleryIdGallery->setGallery(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

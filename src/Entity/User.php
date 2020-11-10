@@ -35,15 +35,13 @@ class User
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=gallery::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=galleryHasUser::class, mappedBy="user")
      */
-    private $gallery_has_user;
-
-
+    private $user_id_user;
 
     public function __construct()
     {
-        $this->gallery_has_user = new ArrayCollection();
+        $this->user_id_user = new ArrayCollection();
     }
 
 
@@ -89,56 +87,26 @@ class User
     }
 
     /**
-     * @return Collection|gallery[]
-     */
-    public function getGalleryHasUser(): Collection
-    {
-        return $this->gallery_has_user;
-    }
-
-    public function addGalleryHasUser(gallery $galleryHasUser): self
-    {
-        if (!$this->gallery_has_user->contains($galleryHasUser)) {
-            $this->gallery_has_user[] = $galleryHasUser;
-            $galleryHasUser->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGalleryHasUser(gallery $galleryHasUser): self
-    {
-        if ($this->gallery_has_user->removeElement($galleryHasUser)) {
-            // set the owning side to null (unless already changed)
-            if ($galleryHasUser->getUser() === $this) {
-                $galleryHasUser->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|comment[]
+     * @return Collection|galleryHasUser[]
      */
     public function getUserIdUser(): Collection
     {
-        return $this->User_id_User;
+        return $this->user_id_user;
     }
 
-    public function addUserIdUser(comment $userIdUser): self
+    public function addUserIdUser(galleryHasUser $userIdUser): self
     {
-        if (!$this->User_id_User->contains($userIdUser)) {
-            $this->User_id_User[] = $userIdUser;
+        if (!$this->user_id_user->contains($userIdUser)) {
+            $this->user_id_user[] = $userIdUser;
             $userIdUser->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeUserIdUser(comment $userIdUser): self
+    public function removeUserIdUser(galleryHasUser $userIdUser): self
     {
-        if ($this->User_id_User->removeElement($userIdUser)) {
+        if ($this->user_id_user->removeElement($userIdUser)) {
             // set the owning side to null (unless already changed)
             if ($userIdUser->getUser() === $this) {
                 $userIdUser->setUser(null);
@@ -147,6 +115,5 @@ class User
 
         return $this;
     }
-
 
 }
